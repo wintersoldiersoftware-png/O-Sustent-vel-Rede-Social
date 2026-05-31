@@ -1,40 +1,24 @@
--- -----------------------------------------------------
--- Tabela: USUARIO
--- -----------------------------------------------------
-CREATE TABLE USUARIO (
-    ID_USUARIO INT AUTO_INCREMENT PRIMARY KEY,
-    NOME VARCHAR(150) NOT NULL,
-    EMAIL VARCHAR(150) NOT NULL UNIQUE,
+-- Criação do banco de dados (caso ainda não exista)
+CREATE DATABASE IF NOT EXISTS ser_sustentavel;
+USE ser_sustentavel;
+
+-- 1. TABELA DE USUÁRIOS (Essencial para a Sprint 1)
+-- Guarda os dados cadastrais e a senha encriptada de forma segura
+CREATE TABLE IF NOT EXISTS USUARIO (
+    ID_USUARIO INT PRIMARY KEY AUTO_INCREMENT,
+    NOME VARCHAR(100) NOT NULL,
+    EMAIL VARCHAR(100) NOT NULL UNIQUE,
     DATA_NASCIMENTO DATE NOT NULL,
     SENHA_HASH VARCHAR(255) NOT NULL,
     DATA_CRIACAO DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- -----------------------------------------------------
--- Tabela: SESSAO_LOGIN
--- -----------------------------------------------------
-CREATE TABLE SESSAO_LOGIN (
-    ID_SESSAO INT AUTO_INCREMENT PRIMARY KEY,
+-- 2. TABELA DE SESSÃO DE LOGIN (Suporte para a Autenticação da Sprint 1)
+-- Guarda os tokens ativos para controlar quem está online no sistema
+CREATE TABLE IF NOT EXISTS SESSAO_LOGIN (
+    ID_SESSAO INT PRIMARY KEY AUTO_INCREMENT,
     ID_USUARIO INT NOT NULL,
     TOKEN_SESSAO VARCHAR(255) NOT NULL,
     DATA_HORA_LOGIN DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_sessao_usuario 
-        FOREIGN KEY (ID_USUARIO) 
-        REFERENCES USUARIO(ID_USUARIO) 
-        ON DELETE CASCADE
+    FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID_USUARIO) ON DELETE CASCADE
 );
-
--- -----------------------------------------------------
--- Tabela: PUBLICACAO
--- -----------------------------------------------------
-CREATE TABLE PUBLICACAO (
-    ID_PUBLICACAO INT AUTO_INCREMENT PRIMARY KEY,
-    ID_USUARIO INT NOT NULL,
-    CONTEUDO TEXT NOT NULL,
-    URL_MIDIA VARCHAR(255),
-    TIPO_MIDIA VARCHAR(50),
-    DATA_PUBLICACAO DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_publicacao_usuario 
-        FOREIGN KEY (ID_USUARIO) 
-        REFERENCES USUARIO(ID_USUARIO) 
-        ON DELETE CASCADE
